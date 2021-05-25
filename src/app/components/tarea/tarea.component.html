@@ -1,0 +1,78 @@
+<div class="container mt-5">
+    <div class="card o-100">
+        <div class="card-header">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="fa fa-plus"> Agregar nueva tarea</i>
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12 mt-3">
+                    <div class="p-3" *ngIf="listaTarea.length === 0">
+                        <h6>No hay tareas para mostrar</h6>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between" *ngIf="listaTarea.length > 0">
+                            <span></span>
+                            <span>Prioridad</span>
+                            <span>Tarea</span>
+                            <span>Fecha finalización</span>
+                            <span></span>
+                        </li>
+                        <li *ngFor="let tarea of listaTarea; let i = index"
+                            class="list-group-item d-flex justify-content-between">
+                            <span class="cursor" (click)="actualizarTarea(tarea, i)">
+                                <i [ngClass]="tarea.estado ? 'far fa-check-circle text-success' : 'far fa-circle'"></i>
+                            </span>
+                            <span>{{tarea.prioridad}}</span>
+                            {{tarea.nombre}}
+                            <span>{{tarea.fechaFinTarea | date:'dd-MM-yyyy'}}</span>
+                            <span class="cursor" [ngClass]="tarea.estado ? 'text-secondary' : 'text-danger'"
+                                (click)="eliminarTarea(tarea, i)">
+                                <i [ngClass]="tarea.estado ? 'fas fa-ban' : 'fas fa-trash-alt' "></i>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="float: right;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Nueva tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12 p-3">
+                        <label>Nombre tarea</label>
+                        <input type="text" [(ngModel)]="nombreTarea" class="form-control form-control-lg"
+                            placeholder="Ingrese tarea..." />
+                    </div>
+                    <div class="col-lg-12 p-3">
+                        <label>Fecha de finalización</label>
+                        <input type="date" class="form-control form-control-lg" [(ngModel)]="fechaTarea"
+                            min="{{  fechaFin | date:'yyyy-MM-dd' }}" />
+                    </div>
+                    <div class="col-lg-12 p-3">
+                        <label>Prioridad</label>
+                        <select class="ustom-select form-control" [(ngModel)]="prioridad">
+                            <option *ngFor="let prioridad of listaPrioridades; let i = index" [ngValue]="prioridad">
+                                {{prioridad.nombrePrioridad}}</option>
+                        </select>
+                    </div>
+                </div>
+                <h6 class="text-danger">{{mensajeAlerta}}</h6>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" (click)="agregarTarea($event)">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
